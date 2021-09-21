@@ -12,9 +12,10 @@
     <p><textarea class="form-control" id="exampleTextarea" rows="3" name="text"></textarea></p>
     <p><input type="submit" class="btn btn-primary btn-lg"> </p>
   	</form>
+{% for data in datas %}
 	<div class="alert alert-dismissible alert-success">
-
-  <strong>{{data}}</strong>
+	<strong>{{data.message}}</strong>
 	</div>
+{% endfor %}
 </body>
 </html>
