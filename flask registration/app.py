@@ -42,5 +42,4 @@ def registration():
         return '<p>Заполните все поля<p>'
     return render_template('registration.html')
 
-
 app.run()
