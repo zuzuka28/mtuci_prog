@@ -11,7 +11,7 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['start'])
 def start(message):
     keyboard = types.ReplyKeyboardMarkup()
-    keyboard.row("хочу", "/news", "/cat","/yapic {}", "/help")
+    keyboard.row("/news", "/cat", "/help")
     bot.send_message(message.chat.id, 'Привет! Хочешь узнать свежую информацию о МТУСИ?', reply_markup=keyboard)
 
 
@@ -20,7 +20,7 @@ def start_message(message):
     bot.send_message(message.chat.id, 'Команды \n'\
     "/news -- Прислать новости МТУСИ (последние 10) \n" \
     "/cat -- Прислать забавную картинку кота \n" \
-    "/yapic -- ССылка на изображение из Я.Картинки")
+    "/yapic -- Изображение из Я.Картинки")
 
 
 @bot.message_handler(commands=['news'])
@@ -52,7 +52,7 @@ def yapic(message):
     actual = []
     for pics in rawpic:
         actual.append(pics.get("href"))
-    bot.send_message(message.chat.id, 'https://yandex.ru'+actual[randint(0, len(actual))])
+    bot.send_photo(message.chat.id, 'https://yandex.ru'+actual[randint(0, len(actual))])
 
 
 @bot.message_handler(content_types=['text'])
@@ -64,6 +64,9 @@ def answer(message):
     if message.text.lower() == "привет":
         bot.send_message(message.chat.id,
                          ("и тебе привет", "привет-привет", "ку!", "привет студент!", "сап")[randint(0, 4)])
+    if message.text.lower() == "пока":
+        bot.send_message(message.chat.id,
+                         ("до скорого", "покасики", "пока-пока!", "чао какао", "пиши чаще")[randint(0, 4)])
 
 
 bot.polling()
