@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 from random import randint
 
-token = "2110949441:AAGZaGYRvJMnmPhVT9a1PBOGdCM5n6IGfh4"
+token = ""
 bot = telebot.TeleBot(token)
 
 
@@ -20,7 +20,7 @@ def start_message(message):
     bot.send_message(message.chat.id, 'Команды \n'\
     "/news -- Прислать новости МТУСИ (последние 10) \n" \
     "/cat -- Прислать забавную картинку кота \n" \
-    "/yapic -- Изображение из Я.Картинки")
+    "/yapic [запрос] -- Изображение из Я.Картинки")
 
 
 @bot.message_handler(commands=['news'])
