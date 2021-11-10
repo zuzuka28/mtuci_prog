@@ -99,17 +99,33 @@ class Calculator(QWidget):
             self.num_2 = float(self.input.text())
 
             if self.op == "+":
-                self.input.setText(str(self.num_1 + self.num_2))
+                res = self.num_1 + self.num_2
+                if res % 1 != 0:
+                    self.input.setText(str(res))
+                else:
+                    self.input.setText(str(int(res)))
 
             if self.op == "-":
-                self.input.setText(str(self.num_1 - self.num_2))
+                res = self.num_1 - self.num_2
+                if res % 1 != 0:
+                    self.input.setText(str(res))
+                else:
+                    self.input.setText(str(int(res)))
 
             if self.op == "*":
-                self.input.setText(str(self.num_1 * self.num_2))
+                res = self.num_1 * self.num_2
+                if res % 1 != 0:
+                    self.input.setText(str(res))
+                else:
+                    self.input.setText(str(int(res)))
 
             if self.op == "/":
                 if self.num_2 != 0:
-                    self.input.setText(str(self.num_1 / self.num_2))
+                    res = self.num_1 / self.num_2
+                    if res % 1 != 0:
+                        self.input.setText(str(res))
+                    else:
+                        self.input.setText(str(int(res)))
                 else:
                     self.input.setText("division by zero")
             if self.op == "clear":
