@@ -1,9 +1,9 @@
 import requests
-from flask import Flask, render_template, request, redirect
+
 import psycopg2
 
-app = Flask(__name__)
-conn = psycopg2.connect(database="service_db", user="sasha", password="password", host="localhost", port="5432")
+
+conn = psycopg2.connect(database="timetable", user="postgres", password="password", host="localhost", port="5432")
 cursor = conn.cursor()
 
 
