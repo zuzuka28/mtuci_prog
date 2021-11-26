@@ -73,6 +73,13 @@ def start_message(message):
 def mtuci_news(message):
     bot.send_message(message.chat.id, 'Вам сюда – https://mtuci.ru/')
 
+@bot.message_handler(commands=['week'])
+def which_week(message):
+    if evenodd() == "о":
+        bot.send_message(message.chat.id, 'не четная')
+    elif evenodd() == "е":
+        bot.send_message(message.chat.id, 'четная')
+
 
 @bot.message_handler(content_types=['text'])
 def answer(message):
