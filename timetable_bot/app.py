@@ -75,9 +75,9 @@ def mtuci_news(message):
 
 @bot.message_handler(commands=['week'])
 def which_week(message):
-    if evenodd() == "о":
+    if evenodd() == "е":
         bot.send_message(message.chat.id, 'не четная')
-    elif evenodd() == "е":
+    elif evenodd() == "о":
         bot.send_message(message.chat.id, 'четная')
 
 
