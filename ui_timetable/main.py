@@ -144,7 +144,7 @@ class MainWindow(QWidget):
         self.table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 
         self.table.setColumnCount(6)
-        self.table.setHorizontalHeaderLabels(["Subject", "Room_numb", "Time", "Even or Odd"])
+        self.table.setHorizontalHeaderLabels(["Subject", "Room_numb", "Time", "Even or Odd", "", ""])
 
         self._update_table(table_gbox[1])
 
@@ -153,9 +153,9 @@ class MainWindow(QWidget):
         table_gbox[0].setLayout(self.mvbox)
 
     def _update_table(self, table_gbox):
-        self.cursor.execute(
-            "SELECT * FROM timetable.timetable WHERE day='{}' and (evenodd='{}' OR evenodd='ео')".format(table_gbox,
-                                                                                                         evenodd()))
+        tmp = "SELECT * FROM timetable.timetable WHERE day='{}' and (evenodd='{}' OR evenodd='ео')".format(table_gbox,
+                                                                                                           evenodd())
+        self.cursor.execute(tmp)
         records = list(self.cursor.fetchall())
 
         self.table.setRowCount(len(records))
@@ -194,12 +194,11 @@ class MainWindow(QWidget):
             to_replace = list(input().split(', '))
             to_replace.append(com[1])
             to_replace.extend([_ for _ in row if _ is not None])
-            self.cursor.execute(
-                "UPDATE timetable.timetable SET subject='{0}', room_numb='{1}', start_time='{2}', evenodd='{3}' "
-                "WHERE day='{4}' and subject='{5}' and room_numb='{6}' and start_time='{7}' and evenodd='{8}'".format(
-                    to_replace[0], to_replace[1], to_replace[2], to_replace[3], to_replace[4],
-                    to_replace[5], to_replace[6], to_replace[7], to_replace[8]))
-
+            tmp = "UPDATE timetable.timetable SET subject='{0}', room_numb='{1}', start_time='{2}', evenodd='{3}' " \
+                  "WHERE day='{4}' and subject='{5}' and room_numb='{6}' and start_time='{7}' and evenodd='{8}'".format(
+                to_replace[0], to_replace[1], to_replace[2], to_replace[3], to_replace[4],
+                to_replace[5], to_replace[6], to_replace[7], to_replace[8])
+            self.cursor.execute(tmp)
             self.conn.commit()
 
         except:
@@ -220,11 +219,13 @@ class MainWindow(QWidget):
                     except:
                         row.append(None)
         try:
+            tmp = "DELETE FROM timetable.timetable WHERE day='{}' and subject='{}' " \
+                  "and room_numb='{}' and start_time='{}' and evenodd='{}'".format(
+                com[1], row[0],
+                row[1], row[2],
+                row[3])
 
-            self.cursor.execute("DELETE FROM timetable.timetable WHERE day='{}' and subject='{}'"
-                                " and room_numb='{}' and start_time='{}' and evenodd='{}'".format(com[1], row[0],
-                                                                                                  row[1], row[2],
-                                                                                                  row[3]))
+            self.cursor.execute(tmp)
             self.conn.commit()
             print("Успешно удалено.")
         except:
@@ -233,14 +234,14 @@ class MainWindow(QWidget):
     def _insert_row_table(self):
         try:
             print("Введите данные: id, day, subject, room_numb, start_time, evenodd")
-            self.cursor.execute("INSERT INTO timetable.timetable "
-                                "(id,day, subject,room_numb,start_time,evenodd)"
-                                " VALUES ('{}','{}','{}','{}','{}','{}')".format(*input().split(', ')))
+            tmp = "INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,evenodd) " \
+                  "VALUES ('{}','{}','{}','{}','{}','{}')".format(*input().split(', '))
+
+            self.cursor.execute(tmp)
             self.conn.commit()
             print("Успешно добавлено.")
         except:
             QMessageBox.about(self, "Error", "Insertion error")
-
 
     def _update_shedule(self):
         self._create_shedule_tab()
