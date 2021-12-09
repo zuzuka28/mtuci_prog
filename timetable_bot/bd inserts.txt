@@ -1,19 +1,19 @@
-INSERT timetable.subject (name) VALUES ('Компьютерная графика сем.');
-INSERT timetable.subject (name) VALUES ('Компьютерная графика лек.');
-INSERT timetable.subject (name) VALUES ('Философия сем.');
-INSERT timetable.subject (name) VALUES ('Философия лек.');
-INSERT timetable.subject (name) VALUES ('Социология сем.');
-INSERT timetable.subject (name) VALUES ('Социология лек.');
-INSERT timetable.subject (name) VALUES ('АГиЛА сем.');
-INSERT timetable.subject (name) VALUES ('АГиЛА лек.');
-INSERT timetable.subject (name) VALUES ('Вышмат сем.');
-INSERT timetable.subject (name) VALUES ('Вышмат лек.');
-INSERT timetable.subject (name) VALUES ('ВвИТ сем.');
-INSERT timetable.subject (name) VALUES ('ВвИТ лек.');
-INSERT timetable.subject (name) VALUES ('Вычтех сем.');
-INSERT timetable.subject (name) VALUES ('Вычтех лек.');
-INSERT timetable.subject (name) VALUES ('ФК');
-INSERT timetable.subject (name) VALUES ('Ин.яз');
+INSERT INTO timetable.subjects (name) VALUES ('Компьютерная графика сем.');
+INSERT INTO timetable.subjects (name) VALUES ('Компьютерная графика лек.');
+INSERT INTO timetable.subjects (name) VALUES ('Философия сем.');
+INSERT INTO timetable.subjects (name) VALUES ('Философия лек.');
+INSERT INTO timetable.subjects (name) VALUES ('Социология сем.');
+INSERT INTO timetable.subjects (name) VALUES ('Социология лек.');
+INSERT INTO timetable.subjects (name) VALUES ('АГиЛА сем.');
+INSERT INTO timetable.subjects (name) VALUES ('АГиЛА лек.');
+INSERT INTO timetable.subjects (name) VALUES ('Вышмат сем.');
+INSERT INTO timetable.subjects (name) VALUES ('Вышмат лек.');
+INSERT INTO timetable.subjects (name) VALUES ('ВвИТ сем.');
+INSERT INTO timetable.subjects (name) VALUES ('ВвИТ лек.');
+INSERT INTO timetable.subjects (name) VALUES ('Вычтех сем.');
+INSERT INTO timetable.subjects (name) VALUES ('Вычтех лек.');
+INSERT INTO timetable.subjects (name) VALUES ('ФК');
+INSERT INTO timetable.subjects (name) VALUES ('Ин.яз');
 
 
 INSERT INTO timetable.teacher (id,full_name, subject) VALUES (0,'Борисова О.А','Компьютерная графика сем.');
