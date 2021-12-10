@@ -1,7 +1,7 @@
 import psycopg2
 import sys
 import datetime
-import time
+
 
 from PyQt5.QtWidgets import (QApplication, QWidget,
                              QTabWidget, QAbstractScrollArea,
@@ -31,9 +31,8 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Shedule")
 
-        self.vbox = QVBoxLayout(self)
-
         self.tabs = QTabWidget(self)
+        self.vbox = QVBoxLayout(self)
         self.vbox.addWidget(self.tabs)
 
         self._create_shedule_tab()
@@ -50,55 +49,35 @@ class MainWindow(QWidget):
         self.cursor = self.conn.cursor()
 
     def _create_subjects_tab(self):
-        self.subjects_tab = QWidget()
-        self.tabs.addTab(self.subjects_tab, "Subjects")
-        self.subj_table = QTableWidget()
-        self.subj_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.subj_box = QGroupBox()
-        self.subj_table.setColumnCount(1)
-        self.subj_table.setHorizontalHeaderLabels(["Subjects"])
+        self.subjects_tab = Tabs("Subjects", 1, ["Subjects"], [self.tabs, self.vbox])
 
         self.cursor.execute(
             "SELECT * FROM timetable.subjects")
         records = self.cursor.fetchall()
 
-        self.subj_table.setRowCount(len(records))
+        self.subjects_tab.table.setRowCount(len(records))
         for i, r in enumerate(records):
             r = list(r)
-            self.subj_table.setItem(i, 0, QTableWidgetItem(str(r[0])))
+            self.subjects_tab.table.setItem(i, 0, QTableWidgetItem(str(r[0])))
 
-        self.subj_mvbox = QVBoxLayout()
-        self.supd_btn = QPushButton("Update")
-        self.supd_btn.clicked.connect(lambda: self._update_shedule())
-        self.subj_mvbox.addWidget(self.supd_btn)
-        self.subj_mvbox.addWidget(self.subj_table)
-        self.subjects_tab.setLayout(self.subj_mvbox)
+        self.subjects_tab.show_tab()
+        self.subjects_tab.upd_btn.clicked.connect(lambda: self._update_shedule())
 
     def _create_teacher_tab(self):
-        self.teachers_tab = QWidget()
-        self.tabs.addTab(self.teachers_tab, "Teachers")
-        self.teach_table = QTableWidget()
-        self.teach_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.teach_box = QGroupBox()
-        self.teach_table.setColumnCount(2)
-        self.teach_table.setHorizontalHeaderLabels(["Full Name", 'Subject'])
+        self.teachers_tab = Tabs("Teachers", 2, ["Full Name", 'Subject'], [self.tabs, self.vbox])
 
         self.cursor.execute(
             "SELECT * FROM timetable.teachers")
         records = self.cursor.fetchall()
 
-        self.teach_table.setRowCount(len(records))
+        self.teachers_tab.table.setRowCount(len(records))
         for i, r in enumerate(records):
             r = list(r)
-            self.teach_table.setItem(i, 0, QTableWidgetItem(str(r[1])))
-            self.teach_table.setItem(i, 1, QTableWidgetItem(str(r[2])))
+            self.teachers_tab.table.setItem(i, 0, QTableWidgetItem(str(r[1])))
+            self.teachers_tab.table.setItem(i, 1, QTableWidgetItem(str(r[2])))
 
-        self.teach_mvbox = QVBoxLayout()
-        self.tupd_btn = QPushButton("Update")
-        self.tupd_btn.clicked.connect(lambda: self._update_shedule())
-        self.teach_mvbox.addWidget(self.tupd_btn)
-        self.teach_mvbox.addWidget(self.teach_table)
-        self.teachers_tab.setLayout(self.teach_mvbox)
+        self.teachers_tab.show_tab()
+        self.teachers_tab.upd_btn.clicked.connect(lambda: self._update_shedule())
 
     def _create_shedule_tab(self):
         self.shedule_tab = QWidget()
@@ -155,7 +134,7 @@ class MainWindow(QWidget):
 
     def _update_table(self, table_gbox):
         tmp = "SELECT * FROM timetable.timetable WHERE day='{}' and (week='{}' OR week='both')".format(table_gbox,
-                                                                                                           week())
+                                                                                                       week())
         self.cursor.execute(tmp)
         records = list(self.cursor.fetchall())
 
@@ -251,6 +230,28 @@ class MainWindow(QWidget):
         self.tabs.removeTab(0)
         self.tabs.removeTab(0)
         self.tabs.removeTab(0)
+
+
+class Tabs(QWidget):
+    def __init__(self, name_tab, num_columns, name_columns, showtab):
+        super(Tabs, self).__init__()
+
+        self.tabs, self.vbox = showtab
+        self.tab = QWidget()
+        self.tabs.addTab(self.tab, name_tab)
+        self.table = QTableWidget()
+        self.table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.box = QGroupBox()
+        self.table.setColumnCount(num_columns)
+        self.table.setHorizontalHeaderLabels([*name_columns])
+
+        self.upd_btn = QPushButton("Update")
+        self.mvbox = QVBoxLayout()
+
+    def show_tab(self):
+        self.mvbox.addWidget(self.upd_btn)
+        self.mvbox.addWidget(self.table)
+        self.tab.setLayout(self.mvbox)
 
 
 app = QApplication(sys.argv)
