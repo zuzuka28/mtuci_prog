@@ -1,0 +1,166 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: timetable; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA timetable;
+
+
+ALTER SCHEMA timetable OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: subjects; Type: TABLE; Schema: timetable; Owner: postgres
+--
+
+CREATE TABLE timetable.subjects (
+    subject character varying NOT NULL
+);
+
+
+ALTER TABLE timetable.subjects OWNER TO postgres;
+
+--
+-- Name: teachers; Type: TABLE; Schema: timetable; Owner: postgres
+--
+
+CREATE TABLE timetable.teachers (
+    id integer NOT NULL,
+    full_name character varying NOT NULL,
+    subject character varying NOT NULL
+);
+
+
+ALTER TABLE timetable.teachers OWNER TO postgres;
+
+--
+-- Name: timetable; Type: TABLE; Schema: timetable; Owner: postgres
+--
+
+CREATE TABLE timetable.timetable (
+    id integer NOT NULL,
+    day character varying NOT NULL,
+    subject character varying NOT NULL,
+    room_numb integer NOT NULL,
+    start_time character varying NOT NULL,
+    week character varying NOT NULL
+);
+
+
+ALTER TABLE timetable.timetable OWNER TO postgres;
+
+--
+-- Data for Name: subjects; Type: TABLE DATA; Schema: timetable; Owner: postgres
+--
+
+COPY timetable.subjects (subject) FROM stdin;
+Компьютерная графика сем.
+Компьютерная графика лек.
+Философия сем.
+Философия лек.
+Социология сем.
+Социология лек.
+АГиЛА сем.
+АГиЛА лек.
+Вышмат сем.
+Вышмат лек.
+ВвИТ сем.
+ВвИТ лек.
+Вычтех сем.
+Вычтех лек.
+ФК
+Ин.яз
+\.
+
+
+--
+-- Data for Name: teachers; Type: TABLE DATA; Schema: timetable; Owner: postgres
+--
+
+COPY timetable.teachers (id, full_name, subject) FROM stdin;
+0	Борисова О.А	Компьютерная графика сем.
+1	Борисова О.А	Компьютерная графика лек.
+2	Попов А.П	Философия сем.
+3	Плужников Н.Н	Философия лек.
+4	Черемисин А.Г	Социология сем.
+5	Черемисин А.Г	Социология лек.
+6	Гудкова И.А	АГиЛА сем.
+7	Гудкова И.А	АГиЛА лек.
+8	Гудкова И.А	Вышмат сем.
+9	Гудкова И.А	Вышмат лек.
+10	Изотова А.А	Вычтех сем.
+11	Симонов С.Е	Вычтех лек.
+12	Павликов А.Е	ВвИТ сем.
+13	Городничев М.Г	ВвИТ лек.
+14	Королева С.А	ФК
+15	Лапаев Л.Л	Ин.яз
+\.
+
+
+--
+-- Data for Name: timetable; Type: TABLE DATA; Schema: timetable; Owner: postgres
+--
+
+COPY timetable.timetable (id, day, subject, room_numb, start_time, week) FROM stdin;
+0	Понедельник	Компьютерная графика сем.	504	9:30	both
+1	Понедельник	Философия сем.	316	11:20	both
+2	Вторник	АГиЛА сем.	314	13:10	both
+3	Вторник	Вышмат сем.	218	15:25	both
+4	Вторник	Вычтех сем.	116	17:15	top
+5	Вторник	Социология сем.	452	17:15	bottom
+6	Среда	Социология лек.	224	9:30	bottom
+7	Среда	Философия лек.	218	11:20	top
+8	Среда	ВвИТ сем.	344	11:20	top
+9	Среда	ВвИТ сем.	514	13:10	both
+10	Среда	ФК	0	15:00	both
+11	Среда	Вычтех сем.	429	17:15	both
+12	Четверг	Вычтех лек.	510	9:30	top
+13	Четверг	АГиЛА лек.	301	11:20	top
+14	Четверг	Вышмат лек.	218	13:10	top
+15	Четверг	Компьютерная графика лек.	517	15:25	top
+16	Пятница	ФК	0	9:30	both
+17	Пятница	Ин.яз	456	11:20	both
+18	Пятница	ВвИТ сем.	116	13:10	both
+\.
+
+
+--
+-- Name: subjects subjects_pkey; Type: CONSTRAINT; Schema: timetable; Owner: postgres
+--
+
+ALTER TABLE ONLY timetable.subjects
+    ADD CONSTRAINT subjects_pkey PRIMARY KEY (subject);
+
+
+--
+-- Name: timetable timetable_subject_fkey; Type: FK CONSTRAINT; Schema: timetable; Owner: postgres
+--
+
+ALTER TABLE ONLY timetable.timetable
+    ADD CONSTRAINT timetable_subject_fkey FOREIGN KEY (subject) REFERENCES timetable.subjects(subject);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
