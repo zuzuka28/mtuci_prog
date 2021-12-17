@@ -1,3 +1,5 @@
+python 3.9
+___
 Telegram bot that send schedule of the institute 's activities
 For each day or for the whole week
 ```py
