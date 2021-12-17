@@ -1,3 +1,4 @@
+py 3.9
 simple realisation of calculator
 ```py
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton
