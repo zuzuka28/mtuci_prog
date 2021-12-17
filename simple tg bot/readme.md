@@ -1,3 +1,5 @@
+python 3.9
+___
 Work with pyTelegramBotAPI
 
 commands:
