@@ -8,5 +8,5 @@ class Calculator(QWidget):
    def _result(self):...
 ```
 
-
+## Results
 > ![Image](https://github.com/zuzuka28/mtuci_prog/raw/main/doc/calc.png)
