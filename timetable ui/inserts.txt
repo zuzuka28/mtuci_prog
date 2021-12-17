@@ -1,6 +1,5 @@
 CREATE TABLE timetable.timetable
 (
-    id INTEGER NOT NULL,
     day VARCHAR NOT NULL,
     subject VARCHAR NOT NULL,
     room_numb INTEGER NOT NULL,
@@ -13,6 +12,7 @@ CREATE TABLE timetable.timetable
 
 ALTER TABLE IF EXISTS timetable.timetable
     OWNER to postgres;
+
 CREATE TABLE timetable.teachers
 (
     id INTEGER NOT NULL,
@@ -25,7 +25,17 @@ CREATE TABLE timetable.teachers
 
 ALTER TABLE IF EXISTS timetable.teachers
     OWNER to postgres;
-    
+
+CREATE TABLE timetable.subjects
+(
+    id INTEGER SERIAL NOT NULL,
+    subject VARCHAR NOT NULL
+
+
+)
+;
+ALTER TABLE IF EXISTS timetable.subjects
+    OWNER to postgres;
 
 INSERT INTO timetable.subjects (subject) VALUES ('Компьютерная графика сем.');
 INSERT INTO timetable.subjects (subject) VALUES ('Компьютерная графика лек.');
@@ -63,41 +73,42 @@ INSERT INTO timetable.teachers (id,full_name, subject) VALUES (14,'Короле�
 INSERT INTO timetable.teachers (id,full_name, subject) VALUES (15,'Лапаев Л.Л','Ин.яз');
 
 
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (0,'Понедельник','Компьютерная графика сем.','504','9:30','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (1,'Понедельник','Философия сем.','316','11:20','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (2,'Вторник','АГиЛА сем.','314','13:10','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (3,'Вторник','Вышмат сем.','218','15:25','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (4,'Вторник','Вычтех сем.','116','17:15','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (5,'Вторник','Социология сем.','452','17:15','bottom');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (6,'Среда','Социология лек.','224','9:30','bottom');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (7,'Среда','Философия лек.','218','11:20','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (8,'Среда','ВвИТ сем.','344','11:20','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (9,'Среда','ВвИТ сем.','514','13:10','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (10,'Среда','ФК','000','15:00','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (11,'Среда','Вычтех сем.','429','17:15','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (12,'Четверг','Вычтех лек.','510','9:30','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (13,'Четверг','АГиЛА лек.','301','11:20','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (14,'Четверг','Вышмат лек.','218','13:10','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (15,'Четверг','Компьютерная графика лек.','517','15:25','top');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (16,'Пятница','ФК','000','9:30','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (17,'Пятница','Ин.яз','456','11:20','both');
-INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week)
-VALUES (18,'Пятница','ВвИТ сем.','116','13:10','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Понедельник','Компьютерная графика сем.','504','9:30','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Понедельник','Философия сем.','316','11:20','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Вторник','АГиЛА сем.','314','13:10','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Вторник','Вышмат сем.','218','15:25','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Вторник','Вычтех сем.','116','17:15','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Вторник','Социология сем.','452','17:15','bottom');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','Социология лек.','224','9:30','bottom');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','Философия лек.','218','11:20','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','ВвИТ сем.','344','11:20','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','ВвИТ сем.','514','13:10','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','ФК','000','15:00','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Среда','Вычтех сем.','429','17:15','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Четверг','Вычтех лек.','510','9:30','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Четверг','АГиЛА лек.','301','11:20','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Четверг','Вышмат лек.','218','13:10','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Четверг','Компьютерная графика лек.','517','15:25','top');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Пятница','ФК','000','9:30','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Пятница','Ин.яз','456','11:20','both');
+INSERT INTO timetable.timetable (day, subject,room_numb,start_time,week)
+VALUES ('Пятница','ВвИТ сем.','116','13:10','both');
+

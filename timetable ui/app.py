@@ -2,7 +2,6 @@ import psycopg2
 import sys
 import datetime
 
-
 from PyQt5.QtWidgets import (QApplication, QWidget,
                              QTabWidget, QAbstractScrollArea,
                              QVBoxLayout, QHBoxLayout,
@@ -48,35 +47,42 @@ class MainWindow(QWidget):
 
         self.cursor = self.conn.cursor()
 
-    def _create_subjects_tab(self):
-        self.subjects_tab = Tabs("Subjects", 1, ["Subjects"], [self.tabs, self.vbox])
+    def checkRow(self, row, day):
+        _row = list()
+        _row.append(day)
 
-        self.cursor.execute(
-            "SELECT * FROM timetable.subjects")
+        for box in self.table_gboxes:
+            if box[1] == day:
+                self._create_table(box)
+                for i in range(self.table.columnCount()):
+                    try:
+                        _row.append(self.table.item(row, i).text())
+                    except:
+                        _row.append(None)
+        return _row
+
+    def _create_subjects_tab(self):
+        self.subjects_tab = Tabs("Предметы", 1, ["Предмет"], [self.tabs, self.vbox])
+
+        sel = "SELECT * FROM timetable.subjects"
+        self.cursor.execute(sel)
         records = self.cursor.fetchall()
 
         self.subjects_tab.table.setRowCount(len(records))
-        for i, r in enumerate(records):
-            r = list(r)
-            self.subjects_tab.table.setItem(i, 0, QTableWidgetItem(str(r[0])))
+        self.subjects_tab.fillTable(records)
 
-        self.subjects_tab.show_tab()
+        self.subjects_tab.showTab()
         self.subjects_tab.upd_btn.clicked.connect(lambda: self._update_shedule())
 
     def _create_teacher_tab(self):
-        self.teachers_tab = Tabs("Teachers", 2, ["Full Name", 'Subject'], [self.tabs, self.vbox])
+        self.teachers_tab = Tabs("Преподаватели", 2, ["ФИО", 'Предмет'], [self.tabs, self.vbox])
 
         self.cursor.execute(
             "SELECT * FROM timetable.teachers")
         records = self.cursor.fetchall()
 
-        self.teachers_tab.table.setRowCount(len(records))
-        for i, r in enumerate(records):
-            r = list(r)
-            self.teachers_tab.table.setItem(i, 0, QTableWidgetItem(str(r[1])))
-            self.teachers_tab.table.setItem(i, 1, QTableWidgetItem(str(r[2])))
-
-        self.teachers_tab.show_tab()
+        self.teachers_tab.fillTable(records)
+        self.teachers_tab.showTab()
         self.teachers_tab.upd_btn.clicked.connect(lambda: self._update_shedule())
 
     def _create_shedule_tab(self):
@@ -144,40 +150,30 @@ class MainWindow(QWidget):
             r = list(r)
             joinButton = QPushButton("Join " + '{} {}'.format(i, self.day_shorts[table_gbox]))
             delButton = QPushButton("Delete " + '{} {}'.format(i, self.day_shorts[table_gbox]))
-            self.table.setItem(i, 0, QTableWidgetItem(str(r[2])))
-            self.table.setItem(i, 1, QTableWidgetItem(str(r[3])))
-            self.table.setItem(i, 2, QTableWidgetItem(str(r[4])))
-            self.table.setItem(i, 3, QTableWidgetItem(str(r[5])))
+            self.table.setItem(i, 0, QTableWidgetItem(str(r[1])))
+            self.table.setItem(i, 1, QTableWidgetItem(str(r[2])))
+            self.table.setItem(i, 2, QTableWidgetItem(str(r[3])))
+            self.table.setItem(i, 3, QTableWidgetItem(str(r[4])))
             self.table.setCellWidget(i, 4, joinButton)
             self.table.setCellWidget(i, 5, delButton)
 
             self.buttonGroup.addButton(joinButton)
             self.delbuttonGroup.addButton(delButton)  # rowNum , day
 
+
+
     def _change_day_from_table(self, button):
         print("Введите изменения:")
+        print("subject, room_numb, start_time, week")
         get_from_button = button.text().split()[1:]
         com = (int(get_from_button[0]), self.day_shorts_[int(get_from_button[1])])
-        row = list()
-
-        for box in self.table_gboxes:
-            if box[1] == com[1]:
-                self._create_table(box)
-                for i in range(self.table.columnCount()):
-                    try:
-                        row.append(self.table.item(com[0], i).text())
-                    except:
-                        row.append(None)
 
         try:
-
             to_replace = list(input().split(', '))
-            to_replace.append(com[1])
-            to_replace.extend([_ for _ in row if _ is not None])
+            to_replace.extend(self.checkRow(com[0], com[1]))
             tmp = "UPDATE timetable.timetable SET subject='{0}', room_numb='{1}', start_time='{2}', week='{3}' " \
                   "WHERE day='{4}' and subject='{5}' and room_numb='{6}' and start_time='{7}' and week='{8}'".format(
-                to_replace[0], to_replace[1], to_replace[2], to_replace[3], to_replace[4],
-                to_replace[5], to_replace[6], to_replace[7], to_replace[8])
+                *to_replace)
             self.cursor.execute(tmp)
             self.conn.commit()
 
@@ -188,22 +184,11 @@ class MainWindow(QWidget):
 
         get_from_button = button.text().split()[1:]
         com = (int(get_from_button[0]), self.day_shorts_[int(get_from_button[1])])
-        row = list()
 
-        for box in self.table_gboxes:
-            if box[1] == com[1]:
-                self._create_table(box)
-                for i in range(self.table.columnCount()):
-                    try:
-                        row.append(self.table.item(com[0], i).text())
-                    except:
-                        row.append(None)
         try:
             tmp = "DELETE FROM timetable.timetable WHERE day='{}' and subject='{}' " \
                   "and room_numb='{}' and start_time='{}' and week='{}'".format(
-                com[1], row[0],
-                row[1], row[2],
-                row[3])
+                *self.checkRow(com[0], com[1]))
 
             self.cursor.execute(tmp)
             self.conn.commit()
@@ -214,28 +199,34 @@ class MainWindow(QWidget):
     def _insert_row_table(self):
         try:
             print("Введите данные: id, day, subject, room_numb, start_time, week")
-            tmp = "INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week) " \
+
+            ins = "INSERT INTO timetable.timetable (id,day, subject,room_numb,start_time,week) " \
                   "VALUES ('{}','{}','{}','{}','{}','{}')".format(*input().split(', '))
 
-            self.cursor.execute(tmp)
+            self.cursor.execute(ins)
             self.conn.commit()
             print("Успешно добавлено.")
         except:
             QMessageBox.about(self, "Error", "Insertion error")
 
     def _update_shedule(self):
+        for i in range(Tabs.number_of_existing_tabs()):
+            self.tabs.removeTab(0)
+        Tabs.createdTabs = 0
         self._create_shedule_tab()
         self._create_subjects_tab()
         self._create_teacher_tab()
-        self.tabs.removeTab(0)
-        self.tabs.removeTab(0)
-        self.tabs.removeTab(0)
 
 
 class Tabs(QWidget):
+    createdTabs = 0
+
     def __init__(self, name_tab, num_columns, name_columns, showtab):
         super(Tabs, self).__init__()
 
+        Tabs.createdTabs += 1
+
+        self.name_tab = name_tab
         self.tabs, self.vbox = showtab
         self.tab = QWidget()
         self.tabs.addTab(self.tab, name_tab)
@@ -248,13 +239,25 @@ class Tabs(QWidget):
         self.upd_btn = QPushButton("Update")
         self.mvbox = QVBoxLayout()
 
-    def show_tab(self):
+    def fillTable(self, records):
+        self.table.setRowCount(len(records))
+        for i, r in enumerate(records):
+            r = list(r)
+            for column in range(self.table.columnCount()):
+                self.table.setItem(i, column, QTableWidgetItem(str(r[column + 1])))
+
+    def showTab(self):
         self.mvbox.addWidget(self.upd_btn)
         self.mvbox.addWidget(self.table)
         self.tab.setLayout(self.mvbox)
+
+    @staticmethod
+    def number_of_existing_tabs():
+        return Tabs.createdTabs
 
 
 app = QApplication(sys.argv)
 win = MainWindow()
 win.show()
 sys.exit(app.exec_())
+
