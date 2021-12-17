@@ -1,5 +1,4 @@
 # FROM INSTITUTE
-python version 3.8
 ___
 
 ## [Calculator](https://github.com/zuzuka28/mtuci_prog/tree/main/calculator)
